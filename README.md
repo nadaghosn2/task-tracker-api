@@ -115,7 +115,7 @@ Other related course documentation lives alongside it in [`docs/midcourse/`](doc
 
 
 
-## 7. Final Project Section
+## 7. Final Project 
 
 ### 7.1 Branch Name
 Final-project
