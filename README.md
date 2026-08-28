@@ -80,7 +80,7 @@ task-tracker-api/
 │   └── index.html         # Single-file board UI (To Do / In Progress / Done), no build step
 ├── tests/
 │   ├── conftest.py        # Shared fixtures (client, created_task) and storage-reset fixture
-│   ├── test_tasks.py      # pytest suite (44 tests)
+│   ├── test_tasks.py      # pytest suite (45 tests)
 │   └── verify_a.py        # Standalone manual verification script (not pytest)
 ├── docs/midcourse/        # Course deliverables: user stories, mini-ADR, verification, reflection
 ├── Dockerfile              # Multi-stage build, non-root user, HEALTHCHECK
