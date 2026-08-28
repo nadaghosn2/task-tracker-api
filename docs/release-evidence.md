@@ -113,16 +113,17 @@ Merged from `c3_step1.md` through `c3_step6.md`.
 
 **Command run:**
 ```bash
-cd /home/esu-linux/AAC
-git branch --show-current
-git status --short
+git clone https://github.com/nadaghosn2/task-tracker-api.git
+cd task-tracker-api
+git checkout final-project
 git log -1 --oneline
 ```
 
 **Result:**
+- Repo: `nadaghosn2/task-tracker-api` (standalone repo, not the `AAC` monorepo)
 - Branch: `final-project`
-- Working tree: not fully clean — `task-tracker-api/c3.md` was untracked (the checklist file created for this proof)
-- HEAD: `f19af7f` ("Add Module 4 CI safety review for ci.yml")
+- Working tree: clean (fresh clone)
+- HEAD: `6e38cb0` ("Sync from AAC monorepo: rename README §7 heading (as of AAC commit c997b82)")
 
 ## 3.2 Step 2 — Pick the smallest assertion to break
 
@@ -177,24 +178,24 @@ pytest -v
 
 **Command run:**
 ```bash
-git add task-tracker-api/tests/test_tasks.py
-git commit -m "Intentional test break for Module 4 CI red-run proof"
+git add tests/test_tasks.py
+git commit -m "Intentional test break for Module 4 CI red-run proof (release-evidence link re-verification)"
 git push origin final-project
 ```
 
 **Result:**
-- Commit: `87b77e5` "Intentional test break for Module 4 CI red-run proof"
-- Pushed: `f19af7f..87b77e5  final-project -> final-project`
-- CI run: [`32773511926`](https://github.com/nadaghosn/AAC/actions/runs/32773511926) — **FAILURE**
+- Commit: `9059afa` "Intentional test break for Module 4 CI red-run proof (release-evidence link re-verification)"
+- Pushed: `6e38cb0..9059afa  final-project -> final-project`
+- CI run: [`33155906144`](https://github.com/nadaghosn2/task-tracker-api/actions/runs/33155906144) — **FAILURE**
 
-CI log evidence:
+CI log evidence (via `gh run view 33155906144 --repo nadaghosn2/task-tracker-api --log-failed`):
 ```
-tests/test_tasks.py:10: in test_create_task_valid_returns_201_with_full_body
+tests/test_tasks.py:11: in test_create_task_valid_returns_201_with_full_body
     assert response.status_code == 200
 E   assert 201 == 200
 E    +  where 201 = <Response [201 Created]>.status_code
 FAILED tests/test_tasks.py::test_create_task_valid_returns_201_with_full_body - assert 201 == 200
-========================= 1 failed, 43 passed in 0.29s =========================
+========================= 1 failed, 44 passed in 0.29s =========================
 ##[error]Process completed with exit code 1.
 ```
 
@@ -208,18 +209,20 @@ git push origin final-project
 ```
 
 **Result:**
-- Revert commit: `3c1c978` "Revert 'Intentional test break for Module 4 CI red-run proof'"
-- Local: `pytest -v` → **44 passed** (line 10 restored to `assert response.status_code == 201`)
-- Pushed: `87b77e5..3c1c978  final-project -> final-project`
-- CI run: [`32773921444`](https://github.com/nadaghosn/AAC/actions/runs/32773921444) — **SUCCESS**
+- Revert commit: `1f12ea6` "Revert 'Intentional test break for Module 4 CI red-run proof (release-evidence link re-verification)'"
+- Local: `pytest -v` → **45 passed** (line 11 restored to `assert response.status_code == 201`)
+- Pushed: `9059afa..1f12ea6  final-project -> final-project`
+- CI run: [`33155983282`](https://github.com/nadaghosn2/task-tracker-api/actions/runs/33155983282) — **SUCCESS**
 
-**Full Green → Red → Green summary:**
+**Full Green → Red → Green summary (re-verified on `nadaghosn2/task-tracker-api`):**
 
 | Commit | State | CI Run | Result |
 |---|---|---|---|
-| `f19af7f` (baseline) | green | `32771773869` | SUCCESS |
-| `87b77e5` (intentional break) | red | `32773511926` | FAILURE — `assert 201 == 200` |
-| `3c1c978` (revert) | green | `32773921444` | SUCCESS |
+| `6e38cb0` (baseline) | green | `33111443228` | SUCCESS |
+| `9059afa` (intentional break) | red | `33155906144` | FAILURE — `assert 201 == 200` |
+| `1f12ea6` (revert) | green | `33155983282` | SUCCESS |
+
+Note: this proof was originally performed on the `nadaghosn/AAC` monorepo (see git history for the earlier `f19af7f`/`87b77e5`/`3c1c978` sequence) before `task-tracker-api` was split out into its own repo; it was re-run above directly on `nadaghosn2/task-tracker-api` so all evidence links resolve against the current repo.
 
 
 # 4. Docker image
@@ -404,7 +407,7 @@ Release Evidence — CI Evidence
 
 ## 9.1 Workflow file: `.github/workflows/ci.yml` (lives at the repository root, which is `task-tracker-api/`; all workflow paths are root-relative, no `working-directory` override)
 
-## 9.2 Latest run link: [`https://github.com/nadaghosn/AAC/actions/runs/32868169333`](https://github.com/nadaghosn/AAC/actions/runs/32868169333) — **SUCCESS**, branch `final-project`, triggered by push (commit `b0c7ba9`, 2026-08-25). Pulled live via `gh run list`/`gh run view`, not from an older cached note.
+## 9.2 Latest run link: [`https://github.com/nadaghosn2/task-tracker-api/actions/runs/33111443228`](https://github.com/nadaghosn2/task-tracker-api/actions/runs/33111443228) — **SUCCESS**, branch `final-project`, triggered by push (2026-08-27). Pulled live via `gh run list`/`gh run view` against `nadaghosn2/task-tracker-api`, not from an older cached note.
 
 ## 9.3 Test command used by CI:
 ```yaml
